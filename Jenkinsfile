@@ -12,7 +12,7 @@ pipeline {
 
     stage('Start Docker Compose') {
       steps {
-        sh 'docker compose up -d --build'
+        sh 'docker-compose up -d --build'
         // Optional: wait for sonarqube to be ready
         sh 'sleep 30'
       }

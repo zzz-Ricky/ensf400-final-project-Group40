@@ -1,5 +1,21 @@
 FROM jenkins/jenkins:alpine
-# switch to root user
+
+# Switch to root to install packages
 USER root
-# install docker on top of the base image
-RUN apk add --update docker openrc
+
+# Install Docker CLI & dependencies
+RUN apk update && apk add --no-cache \
+    docker \
+    openrc \
+    curl \
+    py3-pip \
+    python3
+
+# Install Docker Compose (standalone plugin method)
+RUN pip3 install docker-compose
+
+# Optionally add Jenkins user to Docker group
+RUN addgroup -S docker && adduser jenkins docker
+
+# Start Jenkins with Docker capabilities
+USER jenkins
