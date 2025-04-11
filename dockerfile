@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     software-properties-common
 # #python
-# RUN apt-get install -y python3 python3-pip && \
-#     ln -s /usr/bin/python3 /usr/bin/python
+RUN apt-get install -y python3 python3-pip && \
+    ln -s /usr/bin/python3 /usr/bin/python
 #java
 RUN apt-get install -y openjdk-17-jdk
 RUN apt-get install -y openjdk-17-jre
