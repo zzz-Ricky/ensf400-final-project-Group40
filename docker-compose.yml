@@ -15,7 +15,7 @@ services:
     networks:
       - ci-net
     volumes:
-      - .:/project
+      - ./var/jenkins_home/workspace/my_pipeline:/project
     tty: true
 
   sonarqube:
