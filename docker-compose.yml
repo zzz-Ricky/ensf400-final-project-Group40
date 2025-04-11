@@ -10,7 +10,7 @@ services:
       - sonarqube
     environment:
       SONAR_HOST_URL: http://sonarqube:9000
-    # working_dir: /project
+    working_dir: /workspaces
     command: ["/bin/bash"]
     networks:
       - ci-net
