@@ -34,7 +34,8 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'docker exec -w /project gradle-app sh -c "chmod -R +x ./ && ./gradlew clean assemble"'
+        sh 'docker exec gradle-app find / -name gradlew 2>/dev/null'
+        sh 'docker exec -w /var/jenkins_home/workspace/my_pipeline gradle-app sh -c "chmod +x ./gradlew && ./gradlew clean assemble"'
       }
     }
 
