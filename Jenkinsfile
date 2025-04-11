@@ -14,7 +14,7 @@ pipeline {
       steps {
         sh 'docker-compose up -d --build'
         // Optional: wait for sonarqube to be ready
-        sh 'sleep 30'
+        sh 'sleep 5'
       }
 
       environment {
