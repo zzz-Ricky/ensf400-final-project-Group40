@@ -24,6 +24,13 @@ pipeline {
       }
     }
 
+    stage('Debug') {
+      steps {
+        sh 'pwd'
+        sh 'ls -la'
+      }
+    }
+
     stage('Build') {
       steps {
         sh 'docker exec -w /project gradle-app ./gradlew clean assemble'
