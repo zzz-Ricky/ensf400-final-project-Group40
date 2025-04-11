@@ -10,7 +10,7 @@ pipeline {
       agent any
       steps {
         script {
-          docker.build("my-local-image")
+          docker.build("ensf400-project:latest")
         }
       }
     }
@@ -18,7 +18,7 @@ pipeline {
     stage('Run Pipeline Inside Docker') {
       agent {
         docker {
-          image 'my-local-image'
+          image 'ensf400-project:latest'
         }
       }
       environment {
