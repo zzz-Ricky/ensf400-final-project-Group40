@@ -50,7 +50,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/test/*.xml'
+          junit './build/test-results/test/*.xml'
         }
       }
     }
@@ -63,7 +63,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/integrate/*.xml'
+          junit './build/test-results/integrate/*.xml'
         }
       }
     }
@@ -79,7 +79,7 @@ pipeline {
       }
       post {
           always {
-            junit 'build/test-results/bdd/*.xml'
+            junit './build/test-results/bdd/*.xml'
           }
         }
     }
@@ -121,7 +121,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/api_tests/*.xml'
+          junit './build/test-results/api_tests/*.xml'
         }
       }
     }
@@ -139,7 +139,7 @@ pipeline {
       }
       post {
         always {
-          junit 'build/test-results/bdd_ui/*.xml'
+          junit './build/test-results/bdd_ui/*.xml'
         }
       }
     }
@@ -154,7 +154,7 @@ pipeline {
         }
         post {
             always {
-                junit 'src/ui_tests/java/build/test-results/test/*.xml'
+                junit './src/ui_tests/java/build/test-results/test/*.xml'
             }
         }
     }
