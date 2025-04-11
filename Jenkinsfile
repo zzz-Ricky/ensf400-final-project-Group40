@@ -28,6 +28,7 @@ pipeline {
       steps {
         sh 'pwd'
         sh 'ls -la'
+        sh 'chmod -R +x ./'
       }
     }
 

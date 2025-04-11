@@ -2,6 +2,8 @@ FROM ubuntu:22.04
 COPY . /project
 WORKDIR /project
 
+USER root
+
 #install tool
 RUN apt-get update && apt-get install -y \
     wget \
@@ -40,6 +42,8 @@ RUN chromedriver --version
 
 #Clean
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN chmod -R +x /project
 
 EXPOSE 8080
 # CMD [ "./gradlew","apprun" ]
