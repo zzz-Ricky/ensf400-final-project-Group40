@@ -209,11 +209,10 @@ pipeline {
     // fails, we won't get here.  Note that we aren't really doing anything - this
     // is a token step, to indicate whether we would have deployed or not.  Nothing actually
     // happens, since this is a demo project.
-      stage('Deploy to Prod') {
-        steps {
-          // just a token operation while we pretend to deploy
-          sh 'sleep 5'
-        }
+    stage('Deploy to Prod') {
+      steps {
+        // just a token operation while we pretend to deploy
+        sh 'sleep 5'
       }
     }
   }
