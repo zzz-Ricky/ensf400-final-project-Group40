@@ -34,7 +34,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'docker exec gradle-app sh -c "chmod -R +x ./ && ./gradlew clean assemble"'
+        sh 'docker exec -w /project gradle-app sh -c "chmod -R +x ./ && ./gradlew clean assemble"'
       }
     }
 
