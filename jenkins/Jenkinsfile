@@ -18,7 +18,7 @@ pipeline {
     stage('Run Pipeline Inside Docker') {
       agent {
         docker {
-          image 'ensf400-project:latest'
+          image 'application:latest'
         }
       }
       environment {
