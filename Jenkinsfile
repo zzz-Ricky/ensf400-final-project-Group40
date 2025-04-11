@@ -26,7 +26,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'docker exec gradle-app ./gradlew clean assemble'
+        sh 'docker exec -w /project gradle-app ./gradlew clean assemble'
       }
     }
 
