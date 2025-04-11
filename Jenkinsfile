@@ -4,23 +4,19 @@ pipeline {
 
   agent any
 
+  environment {
+    COMPOSE_PROJECT_NAME = 'ci'
+  }
+
   stages {
 
-    stage('Build Docker Image') {
-      agent any
+    stage('Start Docker Compose') {
       steps {
-        script {
-          docker.build("application:latest")
-        }
+        sh 'docker-compose up -d --build'
+        // Optional: wait for sonarqube to be ready
+        sh 'sleep 30'
       }
-    }
 
-    stage('Run Pipeline Inside Docker') {
-      agent {
-        docker {
-          image 'application:latest'
-        }
-      }
       environment {
         // This is set so that the Python API tests will recognize it
         // and go through the Zap proxy waiting at 9888
@@ -31,7 +27,7 @@ pipeline {
 
         stage('Build') {
           steps {
-            sh './gradlew clean assemble'
+            sh 'docker exec gradle-app ./gradlew clean assemble'
           }
         }
 
@@ -39,7 +35,7 @@ pipeline {
         // to be running and most run very quickly.
         stage('Unit Tests') {
           steps {
-            sh './gradlew test'
+            sh 'docker exec gradle-app ./gradlew test'
           }
           post {
             always {
@@ -52,7 +48,7 @@ pipeline {
         // running database.
         stage('Database Tests') {
           steps {
-            sh './gradlew integrate'
+            sh 'docker exec gradle-app ./gradlew integrate'
           }
           post {
             always {
@@ -66,9 +62,9 @@ pipeline {
         // These tests do not require a running system.
         stage('BDD Tests') {
           steps {
-            sh './gradlew generateCucumberReports'
+            sh 'docker exec gradle-app ./gradlew generateCucumberReports'
             // generate the code coverage report for jacoco
-            sh './gradlew jacocoTestReport'
+            sh 'docker exec gradle-app ./gradlew jacocoTestReport'
           }
           post {
               always {
@@ -81,10 +77,10 @@ pipeline {
         // patterns that suggest potential bugs.
         stage('Static Analysis') {
           steps {
-            sh './gradlew sonarqube'
+            sh 'docker exec gradle-app ./gradlew sonarqube'
             // wait for sonarqube to finish its analysis
             sleep 5
-            sh './gradlew checkQualityGate'
+            sh 'docker exec gradle-app ./gradlew checkQualityGate'
           }
         }
 
@@ -94,15 +90,15 @@ pipeline {
         // require a whole system to be running.
         stage('Deploy to Test') {
           steps {
-          sh './gradlew deployToTestWindowsLocal'
+          sh 'docker exec gradle-app ./gradlew deployToTestWindowsLocal'
           // pipenv needs to be installed and on the path for this to work.
-          sh 'PIPENV_IGNORE_VIRTUALENVS=1 pipenv install'
+          sh 'docker exec gradle-app PIPENV_IGNORE_VIRTUALENVS=1 pipenv install'
 
           // Wait here until the server tells us it's up and listening
-          sh './gradlew waitForHeartBeat'
+          sh 'docker exec gradle-app ./gradlew waitForHeartBeat'
 
           // clear Zap's memory for the incoming tests
-          sh 'curl http://zap/JSON/core/action/newSession -s --proxy localhost:9888'
+          sh 'docker exec gradle-app curl http://zap/JSON/core/action/newSession -s --proxy localhost:9888'
           }
         }
 
@@ -110,7 +106,7 @@ pipeline {
         // Run the tests which investigate the functioning of the API.
         stage('API Tests') {
           steps {
-            sh './gradlew runApiTests'
+            sh 'docker exec gradle-app ./gradlew runApiTests'
           }
           post {
             always {
@@ -127,8 +123,8 @@ pipeline {
         // that purpose, see the following stage, "UI Tests"
         stage('UI BDD Tests') {
           steps {
-            sh './gradlew runBehaveTests'
-            sh './gradlew generateCucumberReport'
+            sh 'docker exec gradle-app ./gradlew runBehaveTests'
+            sh 'docker exec gradle-app ./gradlew generateCucumberReport'
           }
           post {
             always {
@@ -143,7 +139,7 @@ pipeline {
         // covers a small subset of the possibilities of UI behavior.
         stage('UI Tests') {
             steps {
-                sh 'cd src/ui_tests/java && ./gradlew clean test'
+                sh 'docker exec gradle-app cd src/ui_tests/java && ./gradlew clean test'
             }
             post {
                 always {
@@ -167,7 +163,7 @@ pipeline {
         // the build will halt at this point.
         stage('Security: Dependency Analysis') {
           steps {
-              sh './gradlew dependencyCheckAnalyze'
+              sh 'docker exec gradle-app ./gradlew dependencyCheckAnalyze'
           }
         }
 
@@ -176,7 +172,7 @@ pipeline {
         // for a set of common tasks.
         stage('Performance Tests') {
           steps {
-              sh './gradlew runPerfTests'
+              sh 'docker exec gradle-app ./gradlew runPerfTests'
           }
         }
 
@@ -192,20 +188,20 @@ pipeline {
         // providing any value for those lines.
         stage('Mutation Tests') {
           steps {
-              sh './gradlew pitest'
+              sh 'docker exec gradle-app ./gradlew pitest'
           }
         }
 
         stage('Build Documentation') {
           steps {
-              sh './gradlew javadoc'
+              sh 'docker exec gradle-app ./gradlew javadoc'
           }
         }
 
         stage('Collect Zap Security Report') {
           steps {
-            sh 'mkdir -p build/reports/zap'
-            sh 'curl http://zap/OTHER/core/other/htmlreport --proxy localhost:9888 > build/reports/zap/zap_report.html'
+            sh 'docker exec gradle-app mkdir -p build/reports/zap'
+            sh 'docker exec gradle-app curl http://zap/OTHER/core/other/htmlreport --proxy localhost:9888 > build/reports/zap/zap_report.html'
           }
         }
 
