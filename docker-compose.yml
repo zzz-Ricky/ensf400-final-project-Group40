@@ -4,18 +4,18 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     container_name: gradle-app
     depends_on:
       - sonarqube
     environment:
       SONAR_HOST_URL: http://sonarqube:9000
-    working_dir: /project
+    # working_dir: /project
     command: ["/bin/bash"]
     networks:
       - ci-net
     volumes:
-      - .:/project
+      - /workspaces/ensf400-final-project-Group40:/workspaces
     tty: true
 
   sonarqube:
