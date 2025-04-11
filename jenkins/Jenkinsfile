@@ -10,7 +10,7 @@ pipeline {
       agent any
       steps {
         script {
-          docker.build("ensf400-project:latest", '/workspaces/ensf400-final-project-Group40/dockerfile')
+          docker.build("application:latest", '/workspaces/ensf400-final-project-Group40/dockerfile')
         }
       }
     }
