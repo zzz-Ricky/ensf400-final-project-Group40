@@ -20,7 +20,7 @@ services:
 
   sonarqube:
     image: sonarqube:latest
-    container_name: sonarqube
+    container_name: sonarqube-1
     ports:
       - "9000:9000"
     environment:
