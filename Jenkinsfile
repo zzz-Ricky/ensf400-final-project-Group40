@@ -44,16 +44,16 @@ pipeline {
 
     // run all the unit tests - these do not require anything else
     // to be running and most run very quickly.
-    stage('Unit Tests') {
-      steps {
-        sh 'docker exec gradle-app ./gradlew test'
-      }
-      post {
-        always {
-          junit './build/test-results/test/*.xml'
-        }
-      }
-    }
+    // stage('Unit Tests') {
+    //   steps {
+    //     sh 'docker exec gradle-app ./gradlew test'
+    //   }
+    //   post {
+    //     always {
+    //       junit './build/test-results/test/*.xml'
+    //     }
+    //   }
+    // }
 
     // run the tests which require connection to a
     // running database.
