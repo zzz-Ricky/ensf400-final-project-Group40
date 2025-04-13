@@ -27,6 +27,11 @@ save changes and return to jenkins
 ### 5. Testing Build
 return to ```localhost:8081```
 
+create a pipeline named ```my_pipeline``` with the following settings:
+(placholder)
+
+
+
 ## Demo - demonstrates an application and tests
 
 This is an application by [Coveros](https://www.coveros.com/) to demonstrate good
