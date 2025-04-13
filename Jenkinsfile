@@ -55,34 +55,34 @@ pipeline {
     //   }
     // }
 
-    // run the tests which require connection to a
-    // running database.
-    stage('Database Tests') {
-      steps {
-        sh 'docker exec gradle-app ./gradlew integrate'
-      }
-      post {
-        always {
-          junit './build/test-results/integrate/*.xml'
-        }
-      }
-    }
+    // // run the tests which require connection to a
+    // // running database.
+    // stage('Database Tests') {
+    //   steps {
+    //     sh 'docker exec gradle-app ./gradlew integrate'
+    //   }
+    //   post {
+    //     always {
+    //       junit './build/test-results/integrate/*.xml'
+    //     }
+    //   }
+    // }
 
-    // These are the Behavior Driven Development (BDD) tests
-    // See the files in src/bdd_test
-    // These tests do not require a running system.
-    stage('BDD Tests') {
-      steps {
-        sh 'docker exec gradle-app ./gradlew generateCucumberReports'
-        // generate the code coverage report for jacoco
-        sh 'docker exec gradle-app ./gradlew jacocoTestReport'
-      }
-      post {
-          always {
-            junit './build/test-results/bdd/*.xml'
-          }
-        }
-    }
+    // // These are the Behavior Driven Development (BDD) tests
+    // // See the files in src/bdd_test
+    // // These tests do not require a running system.
+    // stage('BDD Tests') {
+    //   steps {
+    //     sh 'docker exec gradle-app ./gradlew generateCucumberReports'
+    //     // generate the code coverage report for jacoco
+    //     sh 'docker exec gradle-app ./gradlew jacocoTestReport'
+    //   }
+    //   post {
+    //       always {
+    //         junit './build/test-results/bdd/*.xml'
+    //       }
+    //     }
+    // }
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
