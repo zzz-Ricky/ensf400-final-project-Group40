@@ -40,23 +40,22 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - dev-network
-
-  app:
-    build:
-      context: .
-      dockerfile: dockerfile
-    container_name: gradle-app
-    depends_on:
-      - sonarqube
-    environment:
-      SONAR_HOST_URL: http://sonarqube:9000
-    working_dir: /workspaces
-    command: [ "/bin/bash" ]
-    networks:
-      - ci-net
-    volumes:
-      - /workspaces/ensf400-final-project-Group40:/workspaces
-    tty: true
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #   container_name: gradle-app
+  #   depends_on:
+  #     - sonarqube
+  #   environment:
+  #     SONAR_HOST_URL: http://sonarqube:9000
+  #   working_dir: /workspaces
+  #   command: [ "/bin/bash" ]
+  #   networks:
+  #     - ci-net
+  #   volumes:
+  #     - /workspaces/ensf400-final-project-Group40:/workspaces
+  #   tty: true
 
 networks:
   dev-network:
