@@ -76,8 +76,3 @@ node_modules/
 .classpath
 .project
 .settings/
-docs/BDD_video.mp4
-
-# Jenkins docker container
-./jenkins/jenkins/*
-jenkins_home

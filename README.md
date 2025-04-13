@@ -2,7 +2,7 @@
 
 This is an application by [Coveros](https://www.coveros.com/) to demonstrate good
 software practices.  As we say in agile... _Working software over comprehensive 
-documentation_ ... but that doesn't mean we can't have pretty good documentation too.
+documentation_ ... but that doesn't mean we can't have pretty good documentation too. 
 
 #### Quick Start:
 
@@ -183,5 +183,3 @@ For example, to set it all up on a [local Windows box](https://raw.githubusercon
 ![SonarQube analysis](https://c2.staticflickr.com/8/7823/33202009548_e678128200_b.jpg)
 
 ![Running performance tests](https://c2.staticflickr.com/8/7854/47077017751_7e045f68dd_b.jpg)
-
-Change made to demonstrate push and pull request...
