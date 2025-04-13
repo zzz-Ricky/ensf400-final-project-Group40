@@ -1,101 +1,131 @@
-// This jenkinsfile is used to run CI/CD on my local (Windows) box, no VM's needed.
-
 pipeline {
-
   agent any
 
-   environment {
-        // This is set so that the Python API tests will recognize it
-        // and go through the Zap proxy waiting at 9888
-        HTTP_PROXY = 'http://127.0.0.1:9888'
-        // Default Java Home for Jenkins (JDK 17)
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk'
-        PATH = "${JAVA_HOME}/bin:${PATH}"
-   }
+  environment {
+    HTTP_PROXY = 'http://127.0.0.1:9888'
+    JAVA_HOME = '/usr/lib/jvm/java-17-openjdk'
+    PATH = "${JAVA_HOME}/bin:${PATH}"
+  }
 
   stages {
 
-    // build the war file (the binary).  This is the only
-    // place that happens.
     stage('Build') {
       environment {
-        // Override JAVA_HOME to use JDK 11 for this stage
         JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
         PATH = "${JAVA_HOME}/bin:${PATH}"
       }
       steps {
+        githubNotify context: 'Build', status: 'PENDING', description: 'Build started'
         sh './gradlew clean assemble'
+      }
+      post {
+        success {
+          githubNotify context: 'Build', status: 'SUCCESS', description: 'Build successful'
+        }
+        failure {
+          githubNotify context: 'Build', status: 'FAILURE', description: 'Build failed'
+        }
       }
     }
 
-    // run all the unit tests - these do not require anything else
-    // to be running and most run very quickly.
     stage('Unit Tests') {
       environment {
-        // Override JAVA_HOME to use JDK 11 for this stage
         JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
         PATH = "${JAVA_HOME}/bin:${PATH}"
       }
       steps {
+        githubNotify context: 'Unit Tests', status: 'PENDING', description: 'Unit tests running'
         sh './gradlew test'
       }
       post {
         always {
           junit 'build/test-results/test/*.xml'
         }
+        success {
+          githubNotify context: 'Unit Tests', status: 'SUCCESS', description: 'Unit tests passed'
+        }
+        failure {
+          githubNotify context: 'Unit Tests', status: 'FAILURE', description: 'Unit tests failed'
+        }
       }
     }
 
-    // run the tests which require connection to a
-    // running database.
     stage('Database Tests') {
       environment {
-        // Override JAVA_HOME to use JDK 11 for this stage
         JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
         PATH = "${JAVA_HOME}/bin:${PATH}"
       }
       steps {
+        githubNotify context: 'Database Tests', status: 'PENDING', description: 'Database tests running'
         sh './gradlew integrate'
       }
       post {
         always {
           junit 'build/test-results/integrate/*.xml'
         }
+        success {
+          githubNotify context: 'Database Tests', status: 'SUCCESS', description: 'Database tests passed'
+        }
+        failure {
+          githubNotify context: 'Database Tests', status: 'FAILURE', description: 'Database tests failed'
+        }
       }
     }
 
-    // These are the Behavior Driven Development (BDD) tests
-    // See the files in src/bdd_test
-    // These tests do not require a running system.
     stage('BDD Tests') {
       environment {
-        // Override JAVA_HOME to use JDK 11 for this stage
         JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
         PATH = "${JAVA_HOME}/bin:${PATH}"
       }
       steps {
+        githubNotify context: 'BDD Tests', status: 'PENDING', description: 'BDD tests running'
         sh './gradlew generateCucumberReports'
-        // generate the code coverage report for jacoco
         sh './gradlew jacocoTestReport'
       }
       post {
-          always {
-            junit 'build/test-results/bdd/*.xml'
-          }
+        always {
+          junit 'build/test-results/bdd/*.xml'
         }
+        success {
+          githubNotify context: 'BDD Tests', status: 'SUCCESS', description: 'BDD tests passed'
+        }
+        failure {
+          githubNotify context: 'BDD Tests', status: 'FAILURE', description: 'BDD tests failed'
+        }
+      }
     }
 
-    // Runs an analysis of the code, looking for any
-    // patterns that suggest potential bugs.
     stage('Static Analysis') {
-        environment {
-          // Override JAVA_HOME to use JDK 11 for this stage
-          JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
-          PATH = "${JAVA_HOME}/bin:${PATH}"
-        }      
-      
-      steps{
+      environment {
+        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+      }
+      steps {
+        githubNotify context: 'Static Analysis', status: 'PENDING', description: 'Static analysis running'
         sh './gradlew sonarqube -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login="admin" -Dsonar.password="ensf400"'
+      }
+      post {
+        success {
+          githubNotify context: 'Static Analysis', status: 'SUCCESS', description: 'Analysis passed'
+        }
+        failure {
+          githubNotify context: 'Static Analysis', status: 'FAILURE', description: 'Analysis failed'
+        }
+      }
+    }
+
+    stage('Deploy to Prod') {
+      steps {
+        githubNotify context: 'Deploy', status: 'PENDING', description: 'Deploying to production'
+        sh 'sleep 5'
+      }
+      post {
+        success {
+          githubNotify context: 'Deploy', status: 'SUCCESS', description: 'Deployment complete'
+        }
+        failure {
+          githubNotify context: 'Deploy', status: 'FAILURE', description: 'Deployment failed'
+        }
       }
     }
   }
