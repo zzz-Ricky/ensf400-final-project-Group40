@@ -235,3 +235,4 @@ For example, to set it all up on a [local Windows box](https://raw.githubusercon
 ![Running performance tests](https://c2.staticflickr.com/8/7854/47077017751_7e045f68dd_b.jpg)
 
 (this is a new test change to prompt a pipeline build)
+(this is a new test change to prompt a pipeline build)
