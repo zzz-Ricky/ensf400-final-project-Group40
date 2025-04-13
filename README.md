@@ -27,11 +27,24 @@ save changes and return to jenkins
 ### 5. Testing Build
 return to ```localhost:8081```
 
-create a pipeline named ```my_pipeline``` with the following settings:
-(placholder)
-(placeholder to test branching webhook)
-(second placeholder to test webhook again)
+### 6. Create a Pipeline
+create a pipeline titled my_pipeline
+check GitHub Project and provide the repository URL
+check GitHub hook trigger for GITScm polling
+under pipeline definition select from SCM
+under SCM choose Git and provide the repository URL again
+change Script Path to ```jenkins/Jenkinsfile```
+click save
 
+### 7. GitHub Webhooks
+go into GitHub settings > webhooks
+add a new webhook with the URL from your Jenkins port and append ```//github-webhook/```
+select "let me select individual events" and check Pull requests
+create the webhook
+
+### 8. Create/Merge Pull Request
+create and merge a pull request and confirm on the Jenkins URL that a build is created
+once succeeded, check sonar for the test coverage report and code quality report
 
 ## Demo - demonstrates an application and tests
 
@@ -205,11 +218,13 @@ For example, to set it all up on a [local Windows box](https://raw.githubusercon
 * Complex commands wrapped simply using Gradle
 * Mutation testing with Pitest
 * Javadocs built
-
+* it is amazing and cool bro
+* new change
+* testo
 
 
 ---
-
+##################
 ## Screenshots:
 ![Jenkins pipeline](https://c2.staticflickr.com/8/7889/33202009658_11422b7f20_b.jpg)
 
