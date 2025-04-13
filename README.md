@@ -205,6 +205,7 @@ For example, to set it all up on a [local Windows box](https://raw.githubusercon
 * Mutation testing with Pitest
 * Javadocs built
 * it is amazing and cool bro
+* new change
 
 
 ---
