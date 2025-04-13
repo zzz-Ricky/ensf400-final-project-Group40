@@ -5,6 +5,7 @@ pipeline {
     HTTP_PROXY = 'http://127.0.0.1:9888'
     JAVA_HOME = '/usr/lib/jvm/java-17-openjdk'
     PATH = "${JAVA_HOME}/bin:${PATH}"
+    GITHUB_TOKEN = credentials('github-token')
   }
 
   stages {
