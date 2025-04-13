@@ -1,3 +1,32 @@
+# Important Steps
+
+### 1. Preparing the codespace
+sudo sysctl -w vm.max_map_count=262144
+
+### 2. Creating the docker containers
+docker compose up -d
+
+### 3. Setting up jenkins
+go to ```localhost:8081```
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+docker compose restart jenkins
+
+### 4. Setting up SonarQube
+go to ```localhost:9000```
+log in with the following credentials:
+```
+username: admin
+password: admin
+```
+
+change the password to the following new password:
+```ensf400```
+
+save changes and return to jenkins
+
+### 5. Testing Build
+return to ```localhost:8081```
+
 ## Demo - demonstrates an application and tests
 
 This is an application by [Coveros](https://www.coveros.com/) to demonstrate good
