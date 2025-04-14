@@ -1,15 +1,15 @@
 # Important Steps
 
 ### 1. Preparing the codespace
-sudo sysctl -w vm.max_map_count=262144
+`sudo sysctl -w vm.max_map_count=262144`
 
 ### 2. Creating the docker containers
-docker compose up -d
+`docker compose up -d`
 
 ### 3. Setting up jenkins
 go to ```localhost:8081```
-docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
-docker compose restart jenkins
+`docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`
+`docker compose restart jenkins`
 
 ### 4. Setting up SonarQube
 go to ```localhost:9000```
@@ -28,11 +28,8 @@ save changes and return to jenkins
 return to ```localhost:8081```
 
 ### 6. Create a Pipeline
-create a pipeline titled my_pipeline
-check GitHub Project and provide the repository URL
-check GitHub hook trigger for GITScm polling
-under pipeline definition select from SCM
-under SCM choose Git and provide the repository URL again
+create a mulitbranch pipeline
+under Branch Sources, select Git and provide the repository URL and credentials
 change Script Path to ```jenkins/Jenkinsfile```
 click save
 
