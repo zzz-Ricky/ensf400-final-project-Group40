@@ -19,19 +19,18 @@ pipeline {
       }
       steps {
         githubNotify context: 'Build', status: 'PENDING', description: 'Build started',
-                     repo: env.GITHUB_REPO, credentialsId: 'github-token',
-                     account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
+
         sh './gradlew clean assemble'
       }
       post {
         success {
           githubNotify context: 'Build', status: 'SUCCESS', description: 'Build successful',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
         failure {
           githubNotify context: 'Build', status: 'FAILURE', description: 'Build failed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
       }
@@ -44,8 +43,7 @@ pipeline {
       }
       steps {
         githubNotify context: 'Unit Tests', status: 'PENDING', description: 'Unit tests running',
-                     repo: env.GITHUB_REPO, credentialsId: 'github-token',
-                     account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
+ 
         sh './gradlew test'
       }
       post {
@@ -54,12 +52,12 @@ pipeline {
         }
         success {
           githubNotify context: 'Unit Tests', status: 'SUCCESS', description: 'Unit tests passed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
         failure {
           githubNotify context: 'Unit Tests', status: 'FAILURE', description: 'Unit tests failed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
       }
@@ -72,8 +70,7 @@ pipeline {
       }
       steps {
         githubNotify context: 'Database Tests', status: 'PENDING', description: 'Database tests running',
-                     repo: env.GITHUB_REPO, credentialsId: 'github-token',
-                     account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
+ 
         sh './gradlew integrate'
       }
       post {
@@ -82,12 +79,12 @@ pipeline {
         }
         success {
           githubNotify context: 'Database Tests', status: 'SUCCESS', description: 'Database tests passed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
         failure {
           githubNotify context: 'Database Tests', status: 'FAILURE', description: 'Database tests failed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
       }
@@ -100,8 +97,7 @@ pipeline {
       }
       steps {
         githubNotify context: 'BDD Tests', status: 'PENDING', description: 'BDD tests running',
-                     repo: env.GITHUB_REPO, credentialsId: 'github-token',
-                     account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
+ 
         sh './gradlew generateCucumberReports'
         sh './gradlew jacocoTestReport'
       }
@@ -111,12 +107,12 @@ pipeline {
         }
         success {
           githubNotify context: 'BDD Tests', status: 'SUCCESS', description: 'BDD tests passed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
         failure {
           githubNotify context: 'BDD Tests', status: 'FAILURE', description: 'BDD tests failed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
       }
@@ -129,19 +125,18 @@ pipeline {
       }
       steps {
         githubNotify context: 'Static Analysis', status: 'PENDING', description: 'Static analysis running',
-                     repo: env.GITHUB_REPO, credentialsId: 'github-token',
-                     account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
+ 
         sh './gradlew sonarqube -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login="admin" -Dsonar.password="ensf400"'
       }
       post {
         success {
           githubNotify context: 'Static Analysis', status: 'SUCCESS', description: 'Analysis passed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
         failure {
           githubNotify context: 'Static Analysis', status: 'FAILURE', description: 'Analysis failed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
       }
@@ -150,19 +145,18 @@ pipeline {
     stage('Deploy to Prod') {
       steps {
         githubNotify context: 'Deploy', status: 'PENDING', description: 'Deploying to production',
-                     repo: env.GITHUB_REPO, credentialsId: 'github-token',
-                     account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
+ 
         sh 'sleep 5'
       }
       post {
         success {
           githubNotify context: 'Deploy', status: 'SUCCESS', description: 'Deployment complete',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
         failure {
           githubNotify context: 'Deploy', status: 'FAILURE', description: 'Deployment failed',
-                       repo: env.GITHUB_REPO, credentialsId: 'github-token',
+                       repo: env.GITHUB_REPO, credentials: env.GITHUB_TOKEN,
                        account: env.GITHUB_ACCOUNT, sha: env.GIT_COMMIT
         }
       }
